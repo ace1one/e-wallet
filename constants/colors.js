@@ -9,6 +9,15 @@ const coffeeTheme = {
     income: "#2ECC71",
     card: "#FFFFFF",
     shadow: "#000000",
+    error: "#D32F2F",
+    success: "#388E3C",
+    warning: "#FFA000",
+    info: "#0288D1",
+    disabled: "#B0BEC5",
+    highlight: "#FFEB3B",
+    accent: "#FF4081",
+    link: "#1976D2",
+    placeholder: "#9A8478",
   };
   
   const forestTheme = {
@@ -22,6 +31,15 @@ const coffeeTheme = {
     income: "#388E3C",
     card: "#FFFFFF",
     shadow: "#000000",
+    error: "#D32F2F",
+    success: "#388E3C",
+    warning: "#FFA000",
+    info: "#0288D1",
+    disabled: "#B0BEC5",
+    highlight: "#FFEB3B",
+    accent: "#FF4081",
+    link: "#1976D2",
+    placeholder: "#9A8478",
   };
   
   const purpleTheme = {
@@ -35,6 +53,15 @@ const coffeeTheme = {
     income: "#388E3C",
     card: "#FFFFFF",
     shadow: "#000000",
+    error: "#D32F2F",
+    success: "#388E3C",
+    warning: "#FFA000",
+    info: "#0288D1",
+    disabled: "#B0BEC5",
+    highlight: "#FFEB3B",
+    accent: "#FF4081",
+    link: "#1976D2",
+    placeholder: "#9A8478",
   };
   
   const oceanTheme = {
@@ -68,4 +95,4 @@ const coffeeTheme = {
   };
   
   // 👇 change this to switch theme
-  export const COLORS = THEMES.ocean;
+  export const COLORS = THEMES.coffee;
