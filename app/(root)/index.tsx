@@ -1,6 +1,6 @@
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
 import { Link, useRouter } from 'expo-router'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import { SignOutButton } from '@/components/SignOutButton'
 import { useTransactions } from '@/hooks/useTransactions'
 import { useEffect } from 'react'
@@ -8,13 +8,15 @@ import PageLoader from '@/components/PageLoader'
 import { styles } from '@/assets/styles/home.styles'
 import { Image } from 'expo-image'
 import { Ionicons } from '@expo/vector-icons'
+import BalanceCard from '@/components/BalanceCard'
+import { TransactionSummary } from '@/Interface/transactions'
+import TransactionList from '@/components/TransactionList'
 
 
 export default function Page() {
   const { user } = useUser()
   const router = useRouter()
   const { transactions, summary, loading, loadData, deleteTransaction  } =  useTransactions(user?.id)
-
   useEffect(() => {
     if (user?.id) {
       console.log('User ID:', user.id)
@@ -55,7 +57,26 @@ if(loading) return <PageLoader />
               </SignedIn>
             </View>
           </View>
+
+          <BalanceCard summary={summary} />
+          <View style={styles.transactionsHeaderContainer}>
+            <Text style={styles.sectionTitle}>
+               Recents Transactions
+            </Text>
+          </View>
       </View>
+
+      <FlatList
+        style={styles.transactionsList}
+        contentContainerStyle={styles.transactionsListContent}
+        data={transactions}
+        renderItem={({ item }) => (
+          <TransactionList
+            item={item}
+           />
+        )}
+      />
+
     </View>
   )
 }

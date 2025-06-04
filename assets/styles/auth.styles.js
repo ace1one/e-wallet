@@ -142,6 +142,15 @@ export const styles = StyleSheet.create({
   SignUpContainer: {
     flex: 1
   },
+  inputLabel: {
+    marginBottom: 6,
+    color: COLORS.text,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  inputGroup: {
+    marginTop: 2,
+  },
 
 
   // 🔴 Error styles

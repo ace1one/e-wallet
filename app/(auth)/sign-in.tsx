@@ -1,12 +1,13 @@
 import { useSignIn } from '@clerk/clerk-expo'
 import { Link, useFocusEffect, useRouter } from 'expo-router'
-import { Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Text, TextInput, TouchableOpacity, View  } from 'react-native'
 import React, { useCallback } from 'react'
 import { styles } from '@/assets/styles/auth.styles'
 import { Image } from 'expo-image'
 import ErrorContainer from '@/components/ErrorContainer'
 import { COLORS } from '@/constants/colors';
 import { Ionicons } from '@expo/vector-icons'
+import { Label } from '@react-navigation/elements'
 
 
 export default function Page() {
@@ -62,7 +63,9 @@ export default function Page() {
       <Image source={require('../../assets/images/revenue-i4.png')} style={ styles.illustration} />
       <Text style={ styles.title}>Sign in</Text>
       <ErrorContainer error={error} onClose={() => setError('')} />
+      <Text style={styles.inputLabel}>Username or Email</Text>
       <View style={[styles.inputIcon, error && styles.errorInput]}>
+     
           <Ionicons
             name='person-outline'
             size={20}
@@ -80,21 +83,14 @@ export default function Page() {
       </View>
 
 
-      {/* <TextInput
-        style={[styles.input, error && styles.errorInput]}
-        value={password}
-        placeholder="Enter password"
-        secureTextEntry={true}
-        onChangeText={(password) => setPassword(password)}
-      /> */}
-
-        <View style={[styles.inputIcon, error && styles.errorInput]}>
-          <Ionicons
-            name='lock-closed-outline'
-            size={20}
-            color={COLORS.text}
-            style={styles.inputLeftIcon}
-          />
+      <Text style={styles.inputLabel}>Password</Text>
+      <View style={[styles.inputIcon, error && styles.errorInput]}>
+        <Ionicons
+          name='lock-closed-outline'
+          size={20}
+          color={COLORS.text}
+          style={styles.inputLeftIcon}
+        />
         <TextInput
           style={styles.inputIconText}
           value={password}

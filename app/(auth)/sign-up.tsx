@@ -99,71 +99,92 @@ export default function SignUpScreen() {
   }
 
   return (
-    <View style={ styles.SignUpContainer}>
-      
-      <View style={ styles.container}>
-      {/* <Text style={styles.appTitle}>E-Wallet</Text> */}
-        <Image source={require('../../assets/images/revenue-i2.png')} style={ styles.illustration} />
-        <Text style={ styles.title}>Create Account</Text>
-        <ErrorContainer error={error} onClose={() => setError('')} />
-        <View style={{ flexDirection: 'row', gap:8 } }>
+<View style={styles.SignUpContainer}>
+  <View style={styles.container}>
+    <Image source={require('../../assets/images/revenue-i2.png')} style={styles.illustration} />
+    <Text style={styles.title}>Create Account</Text>
+    
+    <ErrorContainer error={error} onClose={() => setError('')} />
+
+    {/* First + Last Name */}
+    <View style={{ flexDirection: 'row', gap: 8 }}>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.inputLabel}>First Name</Text>
         <TextInput
-          style={[ styles.input, error && styles.errorInput , { flex: 1 } ]}
+          style={[styles.input, error && styles.errorInput]}
           value={first_name}
           placeholder="Enter first name"
           placeholderTextColor={COLORS.placeholder}
-          onChangeText={(first_name) => setFirstname(first_name)}
-         />
-          <TextInput
-          style={[ styles.input, error && styles.errorInput , { flex: 1 } ]}
+          onChangeText={setFirstname}
+        />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.inputLabel}>Last Name</Text>
+        <TextInput
+          style={[styles.input, error && styles.errorInput]}
           value={last_name}
           placeholder="Enter last name"
           placeholderTextColor={COLORS.placeholder}
-          onChangeText={(last_name) => setLastname(last_name)}
-         />
-        </View>
-        
-        <TextInput
-          style={[ styles.input, error && styles.errorInput ]}
-          autoCapitalize="none"
-          value={emailAddress}
-          placeholder="Enter email"
-          placeholderTextColor={COLORS.placeholder}
-          autoComplete='email'
-          keyboardType='email-address'
-          onChangeText={(email) => setEmailAddress(email)}
+          onChangeText={setLastname}
         />
-        <TextInput
-          style={[ styles.input, error && styles.errorInput ]}
-          value={username}
-          autoCapitalize="none"
-          placeholder="Enter username"
-          placeholderTextColor={COLORS.placeholder}
-          onChangeText={(username) => setUsername(username)}
-         />
-        <TextInput
-          style={[ styles.input, error && styles.errorInput ]}
-          value={password}
-          placeholder="Enter password"
-          secureTextEntry={true}
-          placeholderTextColor={COLORS.placeholder}
-          onChangeText={(password) => setPassword(password)}
-        />
-
-        <TouchableOpacity onPress={onSignUpPress} style={styles.button}>
-              {loading ? (
-            <Text style={styles.buttonText}>Loading...</Text> // Replace with spinner if you prefer
-          ) : (
-            <Text style={styles.buttonText}>Continue</Text>
-          )}
-        </TouchableOpacity>
-        <View style={styles.footerContainer}>
-          <Text style={styles.footerText}>Already have an account?</Text>
-          <TouchableOpacity onPress={()=>router.back()}>
-              <Text style={ styles.linkText}>Sign in</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </View>
+
+    {/* Email */}
+    <View style={styles.inputGroup}>
+      <Text style={styles.inputLabel}>Email</Text>
+      <TextInput
+        style={[styles.input, error && styles.errorInput]}
+        autoCapitalize="none"
+        value={emailAddress}
+        placeholder="Enter email"
+        placeholderTextColor={COLORS.placeholder}
+        autoComplete="email"
+        keyboardType="email-address"
+        onChangeText={setEmailAddress}
+      />
+    </View>
+
+    {/* Username */}
+    <View style={styles.inputGroup}>
+      <Text style={styles.inputLabel}>Username</Text>
+      <TextInput
+        style={[styles.input, error && styles.errorInput]}
+        value={username}
+        autoCapitalize="none"
+        placeholder="Enter username"
+        placeholderTextColor={COLORS.placeholder}
+        onChangeText={setUsername}
+      />
+    </View>
+
+    {/* Password */}
+    <View style={styles.inputGroup}>
+      <Text style={styles.inputLabel}>Password</Text>
+      <TextInput
+        style={[styles.input, error && styles.errorInput]}
+        value={password}
+        placeholder="Enter password"
+        secureTextEntry
+        placeholderTextColor={COLORS.placeholder}
+        onChangeText={setPassword}
+      />
+    </View>
+
+    {/* Continue Button */}
+    <TouchableOpacity onPress={onSignUpPress} style={styles.button}>
+      <Text style={styles.buttonText}>{loading ? 'Loading...' : 'Continue'}</Text>
+    </TouchableOpacity>
+
+    {/* Footer */}
+    <View style={styles.footerContainer}>
+      <Text style={styles.footerText}>Already have an account?</Text>
+      <TouchableOpacity onPress={() => router.back()}>
+        <Text style={styles.linkText}>Sign in</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</View>
+
   )
 }
