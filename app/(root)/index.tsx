@@ -1,6 +1,6 @@
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
 import { Link, useRouter } from 'expo-router'
-import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Text, TouchableOpacity, View } from 'react-native'
 import { SignOutButton } from '@/components/SignOutButton'
 import { useTransactions } from '@/hooks/useTransactions'
 import { useEffect } from 'react'
@@ -9,7 +9,6 @@ import { styles } from '@/assets/styles/home.styles'
 import { Image } from 'expo-image'
 import { Ionicons } from '@expo/vector-icons'
 import BalanceCard from '@/components/BalanceCard'
-import { TransactionSummary } from '@/Interface/transactions'
 import TransactionList from '@/components/TransactionList'
 
 
@@ -19,10 +18,28 @@ export default function Page() {
   const { transactions, summary, loading, loadData, deleteTransaction  } =  useTransactions(user?.id)
   useEffect(() => {
     if (user?.id) {
-      console.log('User ID:', user.id)
       loadData()
     }
   },[loadData])
+
+  const handleTransaction = (id: number) => {
+    Alert.alert('Delete Transaction',
+      'Are you sure you want to delete this transaction?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            deleteTransaction(id,user?.id)
+          }
+        }
+      ]
+    )
+  }
 
 console.log('Transactions:', summary)
 if(loading) return <PageLoader />
@@ -73,6 +90,7 @@ if(loading) return <PageLoader />
         renderItem={({ item }) => (
           <TransactionList
             item={item}
+            onDelete={(id: number) => handleTransaction(id)}
            />
         )}
       />

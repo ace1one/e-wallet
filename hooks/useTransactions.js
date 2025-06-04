@@ -59,10 +59,10 @@ export const useTransactions = (userId) => {
         }
     }, [fetchTransactions, fetchSummary,userId]);
 
-    const deleteTransaction = async (transactionId) => {
+    const deleteTransaction = async (transactionId,userId) => {
         setError(null);
         try {
-            const response = await fetch(`${API_URL}/${transactionId}`, {
+            const response = await fetch(`${API_URL}/userId=${userId}/transactionId=${transactionId}`, {
                 method: 'DELETE',
             });
             if (!response.ok) {

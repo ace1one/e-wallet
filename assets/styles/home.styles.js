@@ -101,19 +101,21 @@ export const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
     color: COLORS.text,
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   balanceStats: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   balanceStatItem: {
-    flex: 1,
-    alignItems: "center",
+    // flex: 1,
+    // alignItems: "center",
   },
   statDivider: {
     borderRightWidth: 1,
     borderColor: COLORS.border,
+    marginHorizontal: 10,
+    // height: '70%',
   },
   balanceStatLabel: {
     fontSize: 14,
@@ -260,4 +262,18 @@ export const styles = StyleSheet.create({
   transactionsListContent: {
     paddingBottom: 20,
   },
+  amountMaskingIcon:{
+    // marginLeft: 10,
+  },
+
+  SvgImage: {
+    width: 18,
+    height: 18,
+    // marginRight: 5,
+  },
+  balanceCardContainer:{
+    flexDirection: "row",
+    alignItems: "center",
+    gap:5
+  }
 });
