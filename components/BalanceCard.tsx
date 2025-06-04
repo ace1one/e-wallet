@@ -8,8 +8,8 @@ import { maskAmount } from "@/lib/utils.js";
 import { Image } from 'expo-image'
 import RupeeIcon from '@/assets/images/rupee.svg';
 
-const BalanceCard = ({ summary }: { summary: TransactionSummary }) => {
-    const [isAmountShow, setIsAmountShow] = React.useState(true)
+const BalanceCard = ({summary,isAmountShow,toggleAmountShow}: {summary: TransactionSummary,isAmountShow: boolean,toggleAmountShow: () => void}) => {
+    // const [isAmountShow, setIsAmountShow] = React.useState(true)
 
   return (
     <View style= { styles.balanceCard }>
@@ -20,7 +20,7 @@ const BalanceCard = ({ summary }: { summary: TransactionSummary }) => {
             <Text style={styles.balanceAmount}>
                 {maskAmount(summary?.balance, !isAmountShow)} 
             </Text>
-            <TouchableOpacity  onPress={()=> setIsAmountShow(prev=> !prev)}>
+            <TouchableOpacity  onPress={toggleAmountShow}>
                 <AmountMasking isAmountShow={isAmountShow} />
             </TouchableOpacity>
         </View>
@@ -49,9 +49,7 @@ const BalanceCard = ({ summary }: { summary: TransactionSummary }) => {
                     {maskAmount(summary?.expenses, !isAmountShow)}
                     </Text>
                 </View>
-                
             </View>
-            
         </View>
     </View>
   )

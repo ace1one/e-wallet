@@ -3,7 +3,7 @@ import { Link, useRouter } from 'expo-router'
 import { Alert, FlatList, Text, TouchableOpacity, View } from 'react-native'
 import { SignOutButton } from '@/components/SignOutButton'
 import { useTransactions } from '@/hooks/useTransactions'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import PageLoader from '@/components/PageLoader'
 import { styles } from '@/assets/styles/home.styles'
 import { Image } from 'expo-image'
@@ -15,6 +15,7 @@ import TransactionList from '@/components/TransactionList'
 export default function Page() {
   const { user } = useUser()
   const router = useRouter()
+  const [isAmountShow, setIsAmountShow] = React.useState(false);
   const { transactions, summary, loading, loadData, deleteTransaction  } =  useTransactions(user?.id)
   useEffect(() => {
     if (user?.id) {
@@ -75,7 +76,11 @@ if(loading) return <PageLoader />
             </View>
           </View>
 
-          <BalanceCard summary={summary} />
+          <BalanceCard 
+            summary={summary}
+            isAmountShow={isAmountShow}
+            toggleAmountShow={() => setIsAmountShow(prev => !prev)} 
+           />
           <View style={styles.transactionsHeaderContainer}>
             <Text style={styles.sectionTitle}>
                Recents Transactions
@@ -90,6 +95,7 @@ if(loading) return <PageLoader />
         renderItem={({ item }) => (
           <TransactionList
             item={item}
+            isAmountShow={isAmountShow}
             onDelete={(id: number) => handleTransaction(id)}
            />
         )}

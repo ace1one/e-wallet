@@ -3,7 +3,8 @@ import React from 'react'
 import { styles } from '@/assets/styles/home.styles';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '@/constants/colors';
-import { formatDate } from '@/lib/utils.js';
+import { formatDate, maskAmount } from '@/lib/utils.js';
+import RupeeIcon from '@/assets/images/rupee.svg';
 
 
 const CATEGORY_ICONS:any={
@@ -21,7 +22,7 @@ const CATEGORY_ICONS:any={
     Other: 'help-circle'
 }
 
-const TransactionList = ({item, onDelete}:any) => {
+const TransactionList = ({item, isAmountShow, onDelete}:any) => {
     const isIncome = item.type === 'income';
     const iconName = CATEGORY_ICONS[item.category] || 'pricetag-outline';
   return (
@@ -36,9 +37,13 @@ const TransactionList = ({item, onDelete}:any) => {
             </View>
 
             <View style={ styles.transactionRight}>
+                <View style={ styles.balanceCardContainer}>
+                <RupeeIcon height={14} width={14} stroke={COLORS.primary} />
                 <Text style={[styles.transactionAmount, { color: isIncome ? COLORS.income : COLORS.expense }]}>
-                    NPR { isIncome ? '+' : '-' }{Number(item.amount).toFixed(2)}
+                    { isIncome ? '+' : '-' } {maskAmount(item?.amount, !isAmountShow)} 
                 </Text>
+                </View>
+               
                 <Text style={ styles.transactionDate}>
                 {formatDate(item.created_at)}
                 </Text>
