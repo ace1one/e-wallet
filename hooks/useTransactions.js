@@ -62,7 +62,11 @@ export const useTransactions = (userId) => {
     const deleteTransaction = async (transactionId,userId) => {
         setError(null);
         try {
-            const response = await fetch(`${API_URL}/userId=${userId}/transactionId=${transactionId}`, {
+            const params = new URLSearchParams({
+                userId,
+                transactionId: transactionId.toString(),
+              });
+            const response = await fetch(`${API_URL}?${params.toString()}`, {
                 method: 'DELETE',
             });
             if (!response.ok) {
