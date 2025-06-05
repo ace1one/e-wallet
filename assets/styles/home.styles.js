@@ -209,10 +209,11 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 10,
     shadowColor: COLORS.shadow,
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
+
   },
   emptyStateIcon: {
     marginBottom: 16,
@@ -260,6 +261,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   transactionsListContent: {
+    flexGrow: 1,
     paddingBottom: 20,
   },
   amountMaskingIcon:{

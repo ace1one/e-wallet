@@ -1,7 +1,8 @@
+import { API_URL } from '@/constants/api';
 import {useCallback, useState } from 'react';
 import { Alert} from 'react-native';
 
-const API_URL = 'https://e-wallet-be.onrender.com/api/transactions';
+const API = `${API_URL}/transactions`;
 export const useTransactions = (userId) => {
     const [transactions, setTransactions] = useState([]);
     const [ summary, setSummary] = useState(
@@ -18,7 +19,7 @@ export const useTransactions = (userId) => {
         setError(null);
         
         try {
-            const response = await fetch(`${API_URL}?userId=${userId}`);
+            const response = await fetch(`${API}?userId=${userId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch transactions');
             }
@@ -35,7 +36,7 @@ export const useTransactions = (userId) => {
         setError(null);
         
         try {
-            const response = await fetch(`${API_URL}/summary?userId=${userId}`);
+            const response = await fetch(`${API}/summary?userId=${userId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch summary');
             }
@@ -66,7 +67,7 @@ export const useTransactions = (userId) => {
                 userId,
                 transactionId: transactionId.toString(),
               });
-            const response = await fetch(`${API_URL}?${params.toString()}`, {
+            const response = await fetch(`${API}?${params.toString()}`, {
                 method: 'DELETE',
             });
             if (!response.ok) {

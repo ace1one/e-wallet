@@ -1,27 +1,35 @@
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
+import { useState,useEffect } from 'react'
 import { Link, useRouter } from 'expo-router'
-import { Alert, FlatList, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native'
 import { SignOutButton } from '@/components/SignOutButton'
 import { useTransactions } from '@/hooks/useTransactions'
-import React, { useEffect } from 'react'
 import PageLoader from '@/components/PageLoader'
 import { styles } from '@/assets/styles/home.styles'
 import { Image } from 'expo-image'
 import { Ionicons } from '@expo/vector-icons'
 import BalanceCard from '@/components/BalanceCard'
 import TransactionList from '@/components/TransactionList'
+import NoTransactionPage from '@/components/NoTransactionPage'
 
 
 export default function Page() {
   const { user } = useUser()
   const router = useRouter()
-  const [isAmountShow, setIsAmountShow] = React.useState(false);
+  const [isAmountShow, setIsAmountShow] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const { transactions, summary, loading, loadData, deleteTransaction  } =  useTransactions(user?.id)
   useEffect(() => {
     if (user?.id) {
       loadData()
     }
   },[loadData])
+
+  const onRefreshTransaction = async () => {
+    setRefreshing(true)
+    await loadData()
+    setRefreshing(false)
+  }
 
   const handleTransaction = (id: number) => {
     Alert.alert('Delete Transaction',
@@ -43,7 +51,7 @@ export default function Page() {
   }
 
 console.log('Transactions:', summary)
-if(loading) return <PageLoader />
+if(loading && !refreshing) return <PageLoader />
   return (
     <View style={ styles.container}>
       <View style={styles.content}>
@@ -99,6 +107,9 @@ if(loading) return <PageLoader />
             onDelete={(id: number) => handleTransaction(id)}
            />
         )}
+        ListEmptyComponent={<NoTransactionPage />}
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshTransaction} />}
       />
 
     </View>

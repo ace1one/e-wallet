@@ -81,8 +81,8 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
-    paddingBottom: 16,
-    marginBottom: 20,
+    // paddingBottom: 16,
+    // marginBottom: 20,
   },
   currencySymbol: {
     fontSize: 32,
@@ -103,7 +103,7 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.border,
     borderRadius: 12,
     padding: 4,
-    marginBottom: 20,
+     marginTop: 20,
     backgroundColor: COLORS.white,
   },
   inputIcon: {
@@ -116,13 +116,16 @@ export const styles = StyleSheet.create({
     color: COLORS.text,
   },
   sectionTitle: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+    marginTop: 20,
+    gap: 8, 
+  },
+  sectionTitleText: {
     fontSize: 18,
     fontWeight: "600",
     color: COLORS.text,
-    marginBottom: 15,
-    marginTop: 10,
-    flexDirection: "row",
-    alignItems: "center",
   },
   categoryGrid: {
     flexDirection: "row",
@@ -149,6 +152,7 @@ export const styles = StyleSheet.create({
   categoryButtonText: {
     color: COLORS.text,
     fontSize: 14,
+    marginLeft: 6,
   },
   categoryButtonTextActive: {
     color: COLORS.white,
