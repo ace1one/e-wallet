@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons'
 import BalanceCard from '@/components/BalanceCard'
 import TransactionList from '@/components/TransactionList'
 import NoTransactionPage from '@/components/NoTransactionPage'
+import { groupTransactionsByDate } from '@/lib/utils'
 
 
 export default function Page() {
@@ -50,53 +51,53 @@ export default function Page() {
     )
   }
 
-console.log('Transactions:', summary)
 if(loading && !refreshing) return <PageLoader />
+const groupedTransactions = groupTransactionsByDate(transactions);
+console.log('Grouped Transactions:', groupedTransactions);
   return (
-    <View style={ styles.container}>
+    <View style={styles.container}>
       <View style={styles.content}>
-          <View style={styles.header}>
-            <View style={styles.headerLeft}>
-              <Image 
-                source={require('../../assets/images/logo.png')}
-                style={styles.headerLogo}
-                contentFit='contain'
-               />
-               <View style={ styles.welcomeContainer}>
-                  <Text style={styles.welcomeText}>
-                    Welcome,
-                  </Text>
-                  <Text style={styles.usernameText}>
-                    {user?.firstName || user?.username || 'User'}
-                  </Text>
-               </View>
-            </View>
-
-            <View style={styles.headerRight}>
-              <TouchableOpacity style={ styles.addButton} onPress={()=> router.push('/create')}>
-                <Ionicons name="add" size={24} color="white" />
-                <Text style={styles.addButtonText}>Add</Text>
-              </TouchableOpacity>
-              
-              <SignedIn>
-                <SignOutButton />
-              </SignedIn>
+        <View style={styles.header}>
+          <View style={styles.headerLeft}>
+            <Image
+              source={require("../../assets/images/logo.png")}
+              style={styles.headerLogo}
+              contentFit="contain"
+            />
+            <View style={styles.welcomeContainer}>
+              <Text style={styles.welcomeText}>Welcome,</Text>
+              <Text style={styles.usernameText}>
+                {user?.firstName || user?.username || "User"}
+              </Text>
             </View>
           </View>
 
-          <BalanceCard 
-            summary={summary}
-            isAmountShow={isAmountShow}
-            toggleAmountShow={() => setIsAmountShow(prev => !prev)} 
-           />
-          <View style={styles.transactionsHeaderContainer}>
-            <Text style={styles.sectionTitle}>
-               Recents Transactions
-            </Text>
+          <View style={styles.headerRight}>
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => router.push("/create")}
+            >
+              <Ionicons name="add" size={24} color="white" />
+              <Text style={styles.addButtonText}>Add</Text>
+            </TouchableOpacity>
+
+            <SignedIn>
+              <SignOutButton />
+            </SignedIn>
           </View>
+        </View>
+
+        <BalanceCard
+          summary={summary}
+          isAmountShow={isAmountShow}
+          toggleAmountShow={() => setIsAmountShow((prev) => !prev)}
+        />
+        <View style={styles.transactionsHeaderContainer}>
+          <Text style={styles.sectionTitle}>Recents Transactions</Text>
+        </View>
       </View>
 
-      <FlatList
+      {/* <FlatList
         style={styles.transactionsList}
         contentContainerStyle={styles.transactionsListContent}
         data={transactions}
@@ -110,8 +111,46 @@ if(loading && !refreshing) return <PageLoader />
         ListEmptyComponent={<NoTransactionPage />}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshTransaction} />}
+      /> */}
+      <FlatList
+        style={styles.transactionsList}
+        contentContainerStyle={styles.transactionsListContent}
+        keyExtractor={(item, index) => {
+          if (item.type === 'header') {
+            // Use date + "header" as key
+            return `header-${item.date}`;
+          } else {
+            // Use unique transaction id with a prefix
+            return `item-${item.id}`;
+          }
+        }}
+        data={groupedTransactions}
+        renderItem={({ item }) =>
+          item.type === "header" ? (
+            <Text style={styles.dateLabel}>
+              {new Date(item.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </Text>
+          ) : (
+            <TransactionList
+              item={item}
+              isAmountShow={isAmountShow}
+              onDelete={(id: number) => handleTransaction(id)}
+            />
+          )
+        }
+        ListEmptyComponent={<NoTransactionPage />}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefreshTransaction}
+          />
+        }
       />
-
     </View>
-  )
+  );
 }

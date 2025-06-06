@@ -8,6 +8,9 @@ import { styles } from '@/assets/styles/create.styles.js';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '@/constants/colors';
 import { API_URL } from '@/constants/api';
+import PageLoader from '@/components/PageLoader';
+import Toast from 'react-native-toast-message';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 const create = () => {
@@ -29,7 +32,7 @@ const create = () => {
   });
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
-
+  const [loadingCategory, setLoadingCategory] = useState(true);
  
 
     const {
@@ -39,18 +42,65 @@ const create = () => {
       watch,
       setValue,
     } = useForm({
+      mode: "onTouched",
+      reValidateMode: "onChange",
       defaultValues: {
         title: '',
         amount: '',
-        category: null,
+        category_id: null,
         type: 'expense',
+        remarks: '',
       },
     });
 
-    const selectedCategory = watch('category');
+    const selectedCategory = watch('category_id');
     const isExpense = watch('type') === 'expense';
-    const onSubmit = (data:any) => {
+    const onSubmit = async (data:any) => {
       console.log(data); // validated form data
+      setLoading(true);
+      const payload = {
+        ...data,
+        user_id: user.id,
+        created_at: new Date().toISOString(),
+      };
+      try {
+        const response = await fetch(`${API_URL}/transactions/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+    
+        const result = await response.json();
+    
+        if (!response.ok) {
+          // ❌ error from server
+          setLoading(false);
+          Toast.show({
+            type: 'error',
+            text1: 'Failed to save transaction',
+            text2: result.message || 'Something went wrong',
+          });
+          return
+        }
+    
+        setLoading(false);
+        // ✅ only show success when response is OK
+        Toast.show({
+          type: 'success',
+          text1: 'Transaction saved successfully!',
+        });
+        router.push('/');
+      } catch (error:any) {
+        console.error('Submit Error:', error.message);
+        setLoading(false);
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: error.message,
+        });
+      }
     };
 
     useEffect(() => {
@@ -58,17 +108,30 @@ const create = () => {
     }, []);
 
     const fetchCategories =  async() => {
+      setLoadingCategory(true);
       try {
         const response = await fetch(`${API_URL}/category`)
         const result = await response.json();
         console.log('Fetched Categories:', result);
         setCategories(result.data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
+        setLoadingCategory(false);
+      } catch (error:any) {
+        setLoadingCategory(false);
+        Toast.show({
+          position: 'bottom',
+          type: 'error',
+          text1: 'Failed to load categories',
+          text2: error.message || 'Something went wrong',
+        });
+      }finally {
+        setLoadingCategory(false);
       }
     }
 
+    if(loadingCategory) return <PageLoader />
+
   return (
+   
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
@@ -78,7 +141,7 @@ const create = () => {
           <Ionicons name="arrow-back" size={24} color={COLORS.text} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Create Transaction</Text>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[
             styles.saveButtonContainer,
             loading && styles.saveButtonDisabled,
@@ -92,14 +155,16 @@ const create = () => {
           {!loading && (
             <Ionicons name="checkmark" size={18} color={COLORS.primary} />
           )}
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
-
+      {/* <KeyboardAwareScrollView> */}
       <View style={styles.card}>
         <View style={styles.typeSelector}>
           <TouchableOpacity
             style={[styles.typeButton, isExpense && styles.typeButtonActive]}
-            onPress={() => setValue('type', 'expense', { shouldValidate: true })}
+            onPress={() =>
+              setValue("type", "expense", { shouldValidate: true })
+            }
           >
             <Ionicons
               name="arrow-down-circle"
@@ -118,7 +183,7 @@ const create = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.typeButton, !isExpense && styles.typeButtonActive]}
-            onPress={() => setValue('type', 'income', { shouldValidate: true })}
+            onPress={() => setValue("type", "income", { shouldValidate: true })}
           >
             <Ionicons
               name="arrow-up-circle"
@@ -147,20 +212,24 @@ const create = () => {
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
-                placeholder='0.00'
+                placeholder="0.00"
                 keyboardType="numeric"
                 placeholderTextColor={COLORS.textLight}
                 style={styles.amountInput}
               />
             )}
           />
-         
         </View>
         {errors.amount && (
-            <Text style={{ color: "red" }}>{errors.amount.message}</Text>
-          )}
-        <View style={ styles.inputContainer}>
-          <Ionicons name="create-outline" size={22} color={COLORS.textLight} style={styles.inputIcon} />
+          <Text style={{ color: "red" }}>{errors.amount.message}</Text>
+        )}
+        <View style={styles.inputContainer}>
+          <Ionicons
+            name="create-outline"
+            size={22}
+            color={COLORS.textLight}
+            style={styles.inputIcon}
+          />
           <Controller
             control={control}
             name="title"
@@ -178,28 +247,33 @@ const create = () => {
           />
         </View>
         {errors.title && (
-            <Text style={{ color: "red" }}>{errors.title.message}</Text>
-          )}
-      <View style={styles.sectionTitle}>
-        <Ionicons name="pricetag-outline" size={16} color={COLORS.textLight} />
-        <Text style={styles.sectionTitleText}>Category</Text>
-      </View>
+          <Text style={{ color: "red" }}>{errors.title.message}</Text>
+        )}
+        <View style={styles.sectionTitle}>
+          <Ionicons
+            name="pricetag-outline"
+            size={16}
+            color={COLORS.textLight}
+          />
+          <Text style={styles.sectionTitleText}>Category</Text>
+        </View>
         <View style={styles.categoryGrid}>
-          {categories.map((category:any) => (
+          {categories.map((category: any) => (
             <TouchableOpacity
               key={category.id}
               style={[
                 styles.categoryButton,
-                selectedCategory === category.id  &&
-                styles.categoryButtonActive,
+                selectedCategory === category.id && styles.categoryButtonActive,
               ]}
-             onPress={() => setValue('category', category.id,{ shouldValidate: true })}
+              onPress={() =>
+                setValue("category_id", category.id, { shouldValidate: true })
+              }
             >
               <Ionicons
                 name={category.icon}
                 size={24}
                 color={
-                  selectedCategory === category.id 
+                  selectedCategory === category.id
                     ? COLORS.white
                     : COLORS.textLight
                 }
@@ -207,16 +281,57 @@ const create = () => {
               <Text
                 style={[
                   styles.categoryButtonText,
-                  selectedCategory === category.id && styles.categoryButtonTextActive,
+                  selectedCategory === category.id &&
+                    styles.categoryButtonTextActive,
                 ]}
               >
                 {category.name}
               </Text>
             </TouchableOpacity>
           ))}
-          </View>
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Ionicons
+            name="chatbubble-outline"
+            size={22}
+            color={COLORS.textLight}
+            style={styles.inputIcon}
+          />
+          <Controller
+            control={control}
+            name="remarks"
+            render={({ field: { onChange, value, onBlur } }) => (
+              <TextInput
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholder="Remarks (optional)"
+                placeholderTextColor={COLORS.textLight}
+                style={styles.input}
+              />
+            )}
+          />
+        </View>
+
+
+
+        <TouchableOpacity
+          onPress={handleSubmit(onSubmit)}
+          style={styles.button}
+          disabled={loading}
+        >
+          {loading ? (
+            <Text style={styles.buttonText}>Saving...</Text> // Replace with spinner if you prefer
+          ) : (
+            <Text style={styles.buttonText}>Save</Text>
+          )}
+        </TouchableOpacity>
       </View>
+      {/* </KeyboardAwareScrollView> */}
     </View>
+   
+
   );
   
 

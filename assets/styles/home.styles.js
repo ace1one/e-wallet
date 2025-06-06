@@ -277,5 +277,13 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap:5
-  }
+  },
+  dateLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: COLORS.textLight,
+    marginTop: 20,
+    marginBottom: 8,
+    marginLeft: 8,
+  },
 });
