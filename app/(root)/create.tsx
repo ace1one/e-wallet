@@ -157,7 +157,7 @@ const create = () => {
           )}
         </TouchableOpacity> */}
       </View>
-      {/* <KeyboardAwareScrollView> */}
+      <KeyboardAwareScrollView>
       <View style={styles.card}>
         <View style={styles.typeSelector}>
           <TouchableOpacity
@@ -328,7 +328,7 @@ const create = () => {
           )}
         </TouchableOpacity>
       </View>
-      {/* </KeyboardAwareScrollView> */}
+      </KeyboardAwareScrollView>
     </View>
    
 
