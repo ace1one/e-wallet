@@ -1,7 +1,7 @@
 import { use, useEffect, useState} from 'react'
 import CATEGORY_ICONS  from '@/constants/category-icons';
 import { useRouter } from 'expo-router';
-import { useUser } from '@clerk/clerk-expo';
+import { useUser } from '@clerk/clerk-expo'
 import { useForm, Controller, set, useWatch } from 'react-hook-form';
 import { TextInput, Text, Button, View, TouchableOpacity } from 'react-native';
 import { styles } from '@/assets/styles/create.styles.js';

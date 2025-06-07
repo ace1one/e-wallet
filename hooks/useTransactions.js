@@ -1,6 +1,7 @@
 import { API_URL } from '@/constants/api';
 import {useCallback, useState } from 'react';
 import { Alert} from 'react-native';
+import Toast from 'react-native-toast-message';
 
 const API = `${API_URL}/transactions`;
 export const useTransactions = (userId) => {
@@ -21,7 +22,12 @@ export const useTransactions = (userId) => {
         try {
             const response = await fetch(`${API}?userId=${userId}`);
             if (!response.ok) {
-                throw new Error('Failed to fetch transactions');
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: 'Failed to fetch transactions',
+                });
+                return;
             }
             const data = await response.json();
             console.log('Fetched transactions:', data);
@@ -38,7 +44,12 @@ export const useTransactions = (userId) => {
         try {
             const response = await fetch(`${API}/summary?userId=${userId}`);
             if (!response.ok) {
-                throw new Error('Failed to fetch summary');
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: 'Failed to fetch summary',
+                });
+                return;
             }
             const data = await response.json();
             setSummary(data);
@@ -71,12 +82,26 @@ export const useTransactions = (userId) => {
                 method: 'DELETE',
             });
             if (!response.ok) {
-                throw new Error('Failed to delete transaction');
+                
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: 'Failed to delete transaction',
+                });
+                return;
             }
             loadData(); // Refresh data after deletion
-            Alert.alert('Success', 'Transaction deleted successfully');
+            Toast.show({
+                type: 'success',
+                text1: 'Success',
+                text2: 'Transaction deleted successfully',
+            });
         } catch (err) {
-           Alert.alert('Error', err.message);
+           Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: err.message,
+            });
         }
     };
     

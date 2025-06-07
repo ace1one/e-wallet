@@ -4,12 +4,16 @@ import  SafeScreen  from "../components/SafeScreen";
 import { tokenCache } from '@clerk/clerk-expo/token-cache'
 import React from "react";
 import Toast from 'react-native-toast-message';
+import { SafeAreaView } from "react-native-safe-area-context";
 export default function RootLayout() {
   return <ClerkProvider tokenCache={tokenCache}>
-    <SafeScreen>
+   {/* <SafeAreaView style={{ flex:1}}> */}
+    {/* <SafeScreen> */}
     <Slot />
     <Toast />
-    </SafeScreen>
+    {/* </SafeScreen> */}
+   
+     {/* </SafeAreaView> */}
  
 </ClerkProvider>
 }

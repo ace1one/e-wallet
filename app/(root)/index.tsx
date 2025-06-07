@@ -1,61 +1,61 @@
-import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
-import { useState,useEffect } from 'react'
-import { Link, useRouter } from 'expo-router'
-import { Alert, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native'
-import { SignOutButton } from '@/components/SignOutButton'
-import { useTransactions } from '@/hooks/useTransactions'
-import PageLoader from '@/components/PageLoader'
-import { styles } from '@/assets/styles/home.styles'
-import { Image } from 'expo-image'
-import { Ionicons } from '@expo/vector-icons'
-import BalanceCard from '@/components/BalanceCard'
-import TransactionList from '@/components/TransactionList'
-import NoTransactionPage from '@/components/NoTransactionPage'
-import { groupTransactionsByDate } from '@/lib/utils'
+import { ScrollView, Dimensions, View } from "react-native";
+import { BarChart } from "react-native-gifted-charts";
+import { useUser, SignedIn } from "@clerk/clerk-expo";
+import { useState, useEffect } from "react";
+import { useRouter } from "expo-router";
+import {
+  Text,
+  TouchableOpacity,
+  RefreshControl,
+} from "react-native";
+import { SignOutButton } from "@/components/SignOutButton";
+import { useTransactions } from "@/hooks/useTransactions";
+import PageLoader from "@/components/PageLoader";
+import { styles } from "@/assets/styles/home.styles";
+import { Image } from "expo-image";
+import { Ionicons } from "@expo/vector-icons";
+import BalanceCard from "@/components/BalanceCard";
+import TransactionList from "@/components/TransactionList";
+import NoTransactionPage from "@/components/NoTransactionPage";
+import { formatDate, groupTransactionsByDate } from "@/lib/utils";
+import { COLORS } from "@/constants/colors";
+import HorizontalBarChart from "@/components/HorizontalBarChart";
 
+const screenWidth = Dimensions.get("window").width;
 
 export default function Page() {
-  const { user } = useUser()
-  const router = useRouter()
+  const { user } = useUser();
+  const router = useRouter();
   const [isAmountShow, setIsAmountShow] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const { transactions, summary, loading, loadData, deleteTransaction  } =  useTransactions(user?.id)
+  const { transactions, summary, loading, loadData, deleteTransaction } =
+    useTransactions(user?.id);
+
+  const limitedTransactions = transactions.slice(0, 5);
+  const groupedTransactions = groupTransactionsByDate(limitedTransactions);
+
   useEffect(() => {
-    if (user?.id) {
-      loadData()
-    }
-  },[loadData])
+    if (user?.id) loadData();
+  }, [loadData]);
 
   const onRefreshTransaction = async () => {
-    setRefreshing(true)
-    await loadData()
-    setRefreshing(false)
-  }
+    setRefreshing(true);
+    await loadData();
+    setRefreshing(false);
+  };
 
-  const handleTransaction = (id: number) => {
-    Alert.alert('Delete Transaction',
-      'Are you sure you want to delete this transaction?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel'
-        },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => {
-            deleteTransaction(id,user?.id)
-          }
-        }
-      ]
-    )
-  }
+  if (loading && !refreshing) return <PageLoader />;
 
-if(loading && !refreshing) return <PageLoader />
-const groupedTransactions = groupTransactionsByDate(transactions);
-console.log('Grouped Transactions:', groupedTransactions);
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefreshTransaction}
+        />
+      }
+    >
       <View style={styles.content}>
         <View style={styles.header}>
           <View style={styles.headerLeft}>
@@ -80,7 +80,6 @@ console.log('Grouped Transactions:', groupedTransactions);
               <Ionicons name="add" size={24} color="white" />
               <Text style={styles.addButtonText}>Add</Text>
             </TouchableOpacity>
-
             <SignedIn>
               <SignOutButton />
             </SignedIn>
@@ -92,65 +91,44 @@ console.log('Grouped Transactions:', groupedTransactions);
           isAmountShow={isAmountShow}
           toggleAmountShow={() => setIsAmountShow((prev) => !prev)}
         />
-        <View style={styles.transactionsHeaderContainer}>
-          <Text style={styles.sectionTitle}>Recents Transactions</Text>
-        </View>
-      </View>
 
-      {/* <FlatList
-        style={styles.transactionsList}
-        contentContainerStyle={styles.transactionsListContent}
-        data={transactions}
-        renderItem={({ item }) => (
-          <TransactionList
-            item={item}
-            isAmountShow={isAmountShow}
-            onDelete={(id: number) => handleTransaction(id)}
-           />
-        )}
-        ListEmptyComponent={<NoTransactionPage />}
-        showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshTransaction} />}
-      /> */}
-      <FlatList
-        style={styles.transactionsList}
-        contentContainerStyle={styles.transactionsListContent}
-        keyExtractor={(item, index) => {
-          if (item.type === 'header') {
-            // Use date + "header" as key
-            return `header-${item.date}`;
-          } else {
-            // Use unique transaction id with a prefix
-            return `item-${item.id}`;
-          }
-        }}
-        data={groupedTransactions}
-        renderItem={({ item }) =>
-          item.type === "header" ? (
-            <Text style={styles.dateLabel}>
-              {new Date(item.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </Text>
+        <View style={styles.transactionsHeaderContainer}>
+          <Text style={styles.sectionTitle}>Recent Transactions</Text>
+          <TouchableOpacity
+            style={styles.viewAllButton}
+            onPress={() => router.push("/transactions")}
+          >
+            <Text style={styles.sectionTitle}>View All</Text>
+            <Ionicons name="chevron-forward" size={16} color={COLORS.text} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.transactionsList}>
+          {groupedTransactions.length === 0 ? (
+            <NoTransactionPage />
           ) : (
-            <TransactionList
-              item={item}
-              isAmountShow={isAmountShow}
-              onDelete={(id: number) => handleTransaction(id)}
-            />
-          )
-        }
-        ListEmptyComponent={<NoTransactionPage />}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefreshTransaction}
-          />
-        }
-      />
-    </View>
+            groupedTransactions.map((item, index) =>
+              item.type === "header" ? (
+                <Text style={styles.dateLabel} key={`header-${item.date}`}>
+                  { formatDate(item.date) }
+                </Text>
+              ) : (
+                <TransactionList
+                  key={`item-${item.id}`}
+                  item={item}
+                  isAmountShow={isAmountShow}
+                  onDelete={(id: number) => deleteTransaction(id, user?.id)}
+                />
+              )
+            )
+          )}
+        </View>
+
+        {/* Horizontal Bar Chart */}
+     
+          {/* <HorizontalBarChart /> */}
+       
+      </View>
+    </ScrollView>
   );
 }

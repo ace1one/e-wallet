@@ -7,10 +7,12 @@ import { formatDate, maskAmount } from '@/lib/utils.js';
 import RupeeIcon from '@/assets/images/rupee.svg';
 import CATEGORY_ICONS  from '@/constants/category-icons';
 import category from '@/constants/category';
+import PopoverModal from './Modal';
 
 
 
 const TransactionList = ({item, isAmountShow, onDelete}:any) => {
+    const [modalVisible, setModalVisible] = React.useState(false);
     const isIncome = item.type === 'income';
     const iconName = category.find(cat => cat.name === item.category)?.icon || 'receipt-outline';
     console.log('Transaction Item:', iconName);
@@ -39,9 +41,17 @@ const TransactionList = ({item, isAmountShow, onDelete}:any) => {
             </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={ styles.deleteButton} onPress={() => onDelete(item.id)}>
+        <TouchableOpacity style={ styles.deleteButton} onPress={() => setModalVisible(true)}>
             <Ionicons name="trash-outline" size={20} color={COLORS.expense} />
         </TouchableOpacity>
+        <PopoverModal
+        visible={modalVisible}
+        title="Confirm Delete"
+        message="Are you sure you want to delete?"
+        buttonName="Delete"
+        onCancel={() => setModalVisible(false)}
+        onConfirm={()=> onDelete(item.id)}
+      />
      
     </View>
   )
