@@ -16,6 +16,9 @@
     },
     "production": {
       "autoIncrement": true,
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_d2FybS1lZWwtNzMuY2xlcmsuYWNjb3VudHMuZGV2JA"
       }
