@@ -6,7 +6,7 @@ import React from "react";
 import Toast from 'react-native-toast-message';
 import { SafeAreaView } from "react-native-safe-area-context";
 export default function RootLayout() {
-  return <ClerkProvider tokenCache={tokenCache}>
+  return <ClerkProvider tokenCache={tokenCache} publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
    {/* <SafeAreaView style={{ flex:1}}> */}
     {/* <SafeScreen> */}
     <Slot />

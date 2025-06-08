@@ -12,7 +12,6 @@ import PageLoader from '@/components/PageLoader';
 import Toast from 'react-native-toast-message';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-
 const create = () => {
   const router = useRouter();
   const { user } = useUser();
@@ -336,5 +335,10 @@ const create = () => {
   
 
 }
+
+
+export const unstable_settings = {
+  href: null, // Hide this route from the tab bar
+};
 
 export default create

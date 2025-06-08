@@ -6,13 +6,19 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_d2FybS1lZWwtNzMuY2xlcmsuYWNjb3VudHMuZGV2JA"
+      }
     },
     "preview": {
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_d2FybS1lZWwtNzMuY2xlcmsuYWNjb3VudHMuZGV2JA"
+      }
     }
   },
   "submit": {

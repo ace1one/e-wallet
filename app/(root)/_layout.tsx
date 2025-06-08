@@ -13,20 +13,24 @@ export default function Layout() {
     
     return (
     <SafeAreaView style={{ flex:1}}>
+      <Stack.Screen
+                name="create"
+                options={{ headerShown: false }} // Configure create.tsx as a stack screen
+            />
         {/* <Stack  screenOptions={{ headerShown: false }} > */}
-        <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+        <Tabs screenOptions={{ tabBarActiveTintColor: 'blue',headerShown:false }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons size={28} name="home-outline" color={color} />,
         }}
       />
       <Tabs.Screen
         name="transactions"
         options={{
           title: 'Statement',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons size={28} name="receipt-outline" color={color} />,
         }}
       />
     </Tabs>
