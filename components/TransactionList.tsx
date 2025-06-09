@@ -15,7 +15,6 @@ const TransactionList = ({item, isAmountShow, onDelete}:any) => {
     const [modalVisible, setModalVisible] = React.useState(false);
     const isIncome = item.type === 'income';
     const iconName = category.find(cat => cat.name === item.category)?.icon || 'receipt-outline';
-    console.log('Transaction Item:', iconName);
   return (
     <View style={ styles.transactionCard} key={item.id}>
         <TouchableOpacity style={ styles.transactionContent}>

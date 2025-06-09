@@ -4,9 +4,9 @@ import SplitBillsIndex from '../split-bills'
 
 const SplitBills = () => {
   return (
-    <View>
+
       <SplitBillsIndex />
-    </View>
+  
   )
 }
 
