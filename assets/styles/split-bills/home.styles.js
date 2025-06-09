@@ -9,6 +9,10 @@ export const styles = StyleSheet.create({
   content: {
     padding: 20,
     paddingBottom: 0,
+    backgroundColor: '#3C2F2F',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius:20,
+    height:220
   },
 
   header: {
@@ -28,11 +32,12 @@ export const styles = StyleSheet.create({
   headerLogo: {
     width: 75,
     height: 75,
+    tintColor: '#F5F5F5',
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: "bold",
-    color: COLORS.textLight,
+    color: '#F5F5F5',
   },
   headerRight: {
     flexDirection: "row",
@@ -40,7 +45,7 @@ export const styles = StyleSheet.create({
     gap: 12,
   },
   groupAddButton: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: '#8B593E',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 12,
@@ -58,7 +63,7 @@ export const styles = StyleSheet.create({
   groupAddButtonText: {
     fontWeight:"600",
     fontSize:16,
-    color: COLORS.white,
+    color: '#F5F5F5',
     marginLeft:10
   },
   billBalanceCard: {
@@ -75,13 +80,41 @@ export const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 3,
   },
+  usernameText: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: COLORS.text,
+    marginBottom: 20,
+  },
 
   balanceCardContainer:{
     flexDirection:"row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+  },
+  balanceOwedContainer:{
+    flexDirection: "row",
+    alignItems: "center",
+    gap:5
   },
   balanceOwed:{
     
-    
-  }
+
+  },
+
+  balanceStatLabel: {
+    fontSize: 14,
+    color: COLORS.textLight,
+    marginBottom: 4,
+  },
+  balanceStatAmount: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+
+  statDivider: {
+    borderRightWidth: 1,
+    borderColor: COLORS.border,
+    marginHorizontal: 10,
+    // height: '70%',
+  },
 });

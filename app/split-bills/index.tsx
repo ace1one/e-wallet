@@ -3,6 +3,7 @@ import React from 'react'
 import { styles } from '@/assets/styles/split-bills/home.styles.js'
 import { Image } from 'expo-image'
 import { FontAwesome6, Ionicons } from '@expo/vector-icons'
+import SplitBillCard from '@/components/SpliBillCard'
 
 const SplitBillsIndex = () => {
   return (
@@ -23,9 +24,8 @@ const SplitBillsIndex = () => {
           </View>
         </View>
       
-      <View style={ styles.billBalanceCard}>
-        <Text>This is card</Text>
-      </View>
+      <SplitBillCard />
+     
        
       </View>
     </View>
