@@ -82,5 +82,6 @@ export const styles = StyleSheet.create({
   },
   balanceOwed:{
     
+    
   }
 });
