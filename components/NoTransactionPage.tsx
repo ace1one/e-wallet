@@ -11,9 +11,9 @@ const NoTransactionPage = () => {
         <Ionicons name="receipt-outline" size={60} color={COLORS.textLight} style={styles.emptyStateIcon} />
       <Text style={styles.emptyStateTitle}>No Transactions</Text>
       <Text style={styles.emptyStateText}>
-        Start tracking your expenses and income by adding your first transaction.
+        Start tracking your expenses and income by adding your transaction.
      </Text>
-     <TouchableOpacity style={styles.emptyStateButton} onPress={()=> router.push('/create')}>
+     <TouchableOpacity style={styles.emptyStateButton} onPress={()=> router.push('/(screens)/createTransactions')}>
         <Ionicons name="add-circle" size={18} color={COLORS.white} />
         <Text style={styles.emptyStateButtonText}>Add Transaction</Text>
       </TouchableOpacity>
