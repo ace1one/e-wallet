@@ -18,6 +18,9 @@ const coffeeTheme = {
     accent: "#FF4081",
     link: "#1976D2",
     placeholder: "#9A8478",
+    neutralGray: '#D1C4B2',
+    mediumGray: '#AFA29A',
+    subtitle: '#999796'
   };
   
   const forestTheme = {

@@ -140,21 +140,6 @@ const create = () => {
           <Ionicons name="arrow-back" size={24} color={COLORS.text} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Create Transaction</Text>
-        {/* <TouchableOpacity
-          style={[
-            styles.saveButtonContainer,
-            loading && styles.saveButtonDisabled,
-          ]}
-          onPress={handleSubmit(onSubmit)}
-          disabled={loading}
-        >
-          <Text style={styles.saveButton}>
-            {loading ? "Saving..." : "Save"}
-          </Text>
-          {!loading && (
-            <Ionicons name="checkmark" size={18} color={COLORS.primary} />
-          )}
-        </TouchableOpacity> */}
       </View>
       <KeyboardAwareScrollView>
       <View style={styles.card}>

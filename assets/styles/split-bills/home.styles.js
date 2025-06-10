@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { COLORS } from "../../../constants/colors";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 export const styles = StyleSheet.create({
   container: {
@@ -15,6 +16,10 @@ export const styles = StyleSheet.create({
     height:220
   },
 
+  tabContainer:{
+    padding:20,
+    marginTop:50
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -117,4 +122,55 @@ export const styles = StyleSheet.create({
     marginHorizontal: 10,
     // height: '70%',
   },
+
+  groupListContainer:{
+    //  flex: 1,
+     borderColor:COLORS.neutralGray,
+     borderWidth:1,
+     padding:10,
+     marginVertical:10,
+     borderRadius:8,
+     flexDirection:'row'
+  },
+  groupListItem: {
+      // flex: 1,
+     flexDirection: "row",
+    // padding: 15,
+      alignItems: "center",
+      justifyContent:'space-around'
+    // flex: 1,
+    // padding: 20,
+    // borderWidth:1,
+    // borderColor:'gray'
+
+  },
+
+  groupIconContainer:{
+    width: 55,
+    height: 55,
+    borderRadius: 30, // makes it a circle
+    backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10, // spacing between icon and text
+  },
+  groupIcon:{
+    color: COLORS.white
+  },
+  groupTitle:{
+    fontSize:20,
+    fontWeight:'700',
+    color: COLORS.textLight
+  },
+  groupLastTransaction:{
+    // flexDirection:'row',
+    // flex:1,
+    color:COLORS.subtitle,
+    flexShrink:1,
+    flexWrap: 'wrap'
+  },
+  transactionContainer:{
+    flex:1,
+    flexShrink:1
+  }
 });

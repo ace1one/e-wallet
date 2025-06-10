@@ -8,11 +8,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { customTheme} from '../constants/custom-theme.js';
 export default function RootLayout() {
   return (
    <>
     {/* <IconRegistry icons={EvaIconsPack} /> */}
-    <ApplicationProvider {...eva} theme={eva.light}>
+    <ApplicationProvider {...eva} theme={customTheme}>
 <ClerkProvider tokenCache={tokenCache} publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
    {/* <SafeAreaView style={{ flex:1}}> */}
     {/* <SafeScreen> */}
