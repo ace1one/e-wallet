@@ -2,9 +2,11 @@ import { API_URL } from '@/constants/api';
 import {useCallback, useState } from 'react';
 import { Alert} from 'react-native';
 import Toast from 'react-native-toast-message';
+import { useAuth } from '@clerk/clerk-expo';
 
 const API = `${API_URL}/transactions`;
 export const useTransactions = (userId) => {
+    const { getToken } = useAuth();
     const [transactions, setTransactions] = useState([]);
     const [ summary, setSummary] = useState(
         {
@@ -15,12 +17,25 @@ export const useTransactions = (userId) => {
     );
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    const fetchWithAuth = async (url, options = {}) => {
+        const token = await getToken({ template: 'mobile' });
+        console.log('JWT Token:', token);
+        return fetch(url, {
+          ...options,
+          headers: {
+            ...options.headers,
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+      };
     
     const fetchTransactions = useCallback(async () => {
         setError(null);
         
         try {
-            const response = await fetch(`${API}?userId=${userId}`);
+            const response = await fetchWithAuth(`${API}?userId=${userId}`);
             if (!response.ok) {
                 Toast.show({
                     type: 'error',
@@ -42,7 +57,8 @@ export const useTransactions = (userId) => {
         setError(null);
         
         try {
-            const response = await fetch(`${API}/summary?userId=${userId}`);
+            const response = await fetchWithAuth(`${API}/summary?userId=${userId}`);
+            console.log('Summary',response)
             if (!response.ok) {
                 Toast.show({
                     type: 'error',
@@ -78,7 +94,7 @@ export const useTransactions = (userId) => {
                 userId,
                 transactionId: transactionId.toString(),
               });
-            const response = await fetch(`${API}?${params.toString()}`, {
+            const response = await fetchWithAuth(`${API}?${params}`, {
                 method: 'DELETE',
             });
             if (!response.ok) {

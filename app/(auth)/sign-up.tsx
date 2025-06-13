@@ -46,6 +46,7 @@ export default function SignUpScreen() {
       setPendingVerification(true)
     } catch (err) {
       if (err instanceof Error) {
+        console.log(err)
         setError(err.message)
       }
     }finally{

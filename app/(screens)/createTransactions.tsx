@@ -1,7 +1,7 @@
 import { use, useEffect, useState} from 'react'
 import CATEGORY_ICONS  from '@/constants/category-icons';
 import { useRouter } from 'expo-router';
-import { useUser } from '@clerk/clerk-expo'
+import { useAuth, useUser } from '@clerk/clerk-expo'
 import { useForm, Controller, set, useWatch } from 'react-hook-form';
 import { TextInput, Text, Button, View, TouchableOpacity } from 'react-native';
 import { styles } from '@/assets/styles/create.styles.js';
@@ -13,6 +13,8 @@ import Toast from 'react-native-toast-message';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const create = () => {
+  const { getToken } = useAuth();
+ 
   const router = useRouter();
   const { user } = useUser();
   if (!user) {
@@ -32,7 +34,19 @@ const create = () => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loadingCategory, setLoadingCategory] = useState(true);
- 
+
+  const fetchWithAuth = async (url:any, options:any = {}) => {
+    const token = await getToken({ template: 'mobile' });
+    console.log('JWT Token:', token);
+    return fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+  };
 
     const {
       control,
@@ -55,6 +69,7 @@ const create = () => {
     const selectedCategory = watch('category_id');
     const isExpense = watch('type') === 'expense';
     const onSubmit = async (data:any) => {
+      const token = await getToken({ template: 'mobile' });
       console.log(data); // validated form data
       setLoading(true);
       const payload = {
@@ -63,11 +78,8 @@ const create = () => {
         created_at: new Date().toISOString(),
       };
       try {
-        const response = await fetch(`${API_URL}/transactions/create`, {
+        const response = await fetchWithAuth(`${API_URL}/transactions/create`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
           body: JSON.stringify(payload),
         });
     
@@ -109,7 +121,7 @@ const create = () => {
     const fetchCategories =  async() => {
       setLoadingCategory(true);
       try {
-        const response = await fetch(`${API_URL}/category`)
+        const response = await fetchWithAuth(`${API_URL}/category`)
         const result = await response.json();
         console.log('Fetched Categories:', result);
         setCategories(result.data);
@@ -242,7 +254,7 @@ const create = () => {
           <Text style={styles.sectionTitleText}>Category</Text>
         </View>
         <View style={styles.categoryGrid}>
-          {categories.map((category: any) => (
+          {categories?.map((category: any) => (
             <TouchableOpacity
               key={category.id}
               style={[
