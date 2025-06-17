@@ -35,7 +35,7 @@ export const useTransactions = (userId) => {
         setError(null);
         
         try {
-            const response = await fetchWithAuth(`${API}?userId=${userId}`);
+            const response = await fetchWithAuth(API);
             if (!response.ok) {
                 Toast.show({
                     type: 'error',
@@ -57,7 +57,7 @@ export const useTransactions = (userId) => {
         setError(null);
         
         try {
-            const response = await fetchWithAuth(`${API}/summary?userId=${userId}`);
+            const response = await fetchWithAuth(`${API}/summary`);
             console.log('Summary',response)
             if (!response.ok) {
                 Toast.show({
@@ -91,7 +91,6 @@ export const useTransactions = (userId) => {
         setError(null);
         try {
             const params = new URLSearchParams({
-                userId,
                 transactionId: transactionId.toString(),
               });
             const response = await fetchWithAuth(`${API}?${params}`, {

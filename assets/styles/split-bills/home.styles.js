@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
 
   tabContainer:{
     padding:20,
-    marginTop:50
+    marginTop:80
   },
   header: {
     flexDirection: "row",
@@ -130,14 +130,15 @@ export const styles = StyleSheet.create({
      padding:10,
      marginVertical:10,
      borderRadius:8,
-     flexDirection:'row'
+    //  flexDirection:'row'
   },
   groupListItem: {
       // flex: 1,
+      // display:'flex',
      flexDirection: "row",
     // padding: 15,
       alignItems: "center",
-      justifyContent:'space-around'
+      justifyContent:'space-between'
     // flex: 1,
     // padding: 20,
     // borderWidth:1,
@@ -150,7 +151,8 @@ export const styles = StyleSheet.create({
     height: 55,
     borderRadius: 30, // makes it a circle
     backgroundColor: COLORS.primary,
-    justifyContent: 'center',
+    flexDirection:'row',
+     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10, // spacing between icon and text
   },
@@ -170,7 +172,8 @@ export const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   transactionContainer:{
-    flex:1,
-    flexShrink:1
+    // flex:1,
+    // flexShrink:1
   }
+
 });
