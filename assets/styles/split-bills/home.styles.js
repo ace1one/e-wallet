@@ -174,6 +174,14 @@ export const styles = StyleSheet.create({
   transactionContainer:{
     // flex:1,
     // flexShrink:1
-  }
+  },
+
+  fab: {
+    position: 'absolute',
+    right: 16,
+    bottom: 16,
+    backgroundColor:COLORS.primary,
+    color:COLORS.white
+  },
 
 });

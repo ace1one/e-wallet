@@ -1,23 +1,17 @@
-import { View, TouchableOpacity,Text } from "react-native";
-import React from "react";
 import { styles } from "@/assets/styles/split-bills/home.styles.js";
-import { Image } from "expo-image";
-import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import SplitBillCard from "@/components/SpliBillCard";
-import RupeeIcon from '@/assets/images/rupee.svg';
+import { COLORS } from "@/constants/colors";
+import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { FAB } from 'react-native-paper';
 import {
-  Icon,
-  IconElement,
   Layout,
   Tab,
-  TabBar,
-  TabBarProps,
   TabView
 } from "@ui-kitten/components";
-import { COLORS } from "@/constants/colors";
-import  SplitBillCategory  from "@/constants/split-bill-category.js";
-import { dateTimeFormat, formatDate } from "@/lib/utils";
+import { Image } from "expo-image";
 import { router } from "expo-router";
+import React from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import Group from "./group";
 
 const PersonIcon = (index: number, selectedIndex: number) => (
@@ -92,6 +86,14 @@ const SplitBillsIndex = () => {
           </Tab>
         </TabView>
       </View>
+
+      <FAB
+          style={styles.fab}
+          icon="plus"
+          label="Add Expense"
+          color="#FFFF"
+          onPress={() => console.log('Pressed')}
+        />
     </View>
   );
 };
