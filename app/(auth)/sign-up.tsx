@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { COLORS } from '@/constants/colors';
 import { Image } from "expo-image";
 import ErrorContainer from '@/components/ErrorContainer';
+import { OtpInput } from "react-native-otp-entry";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp()
@@ -21,6 +22,7 @@ export default function SignUpScreen() {
   const [code, setCode] = React.useState('')
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(false)
+  const [passwordVisible, setPasswordVisible] = React.useState(false)
 
   // Handle submission of sign-up form
   const onSignUpPress = async () => {
@@ -86,12 +88,17 @@ export default function SignUpScreen() {
       <View style={ styles.container}>
         <Text style={ styles.verificationTitle}>Verify your email</Text>
         <ErrorContainer error={error} onClose={() => setError('')} />
-        <TextInput
-         style={[ styles.verificationInput, error && styles.errorInput ]}
-          value={code}
-          placeholder="Enter your verification code"
-          onChangeText={(code) => setCode(code)}
-        />
+          <View style={[ styles.verificationInput, error && styles.errorInput ]}>
+            <OtpInput 
+            numberOfDigits={6} 
+            onTextChange={(code) => setCode(code)}
+            theme={{
+              focusedPinCodeContainerStyle:{borderColor: COLORS.primary},
+              focusStickStyle: {backgroundColor: COLORS.primary},
+            }} />
+
+          </View>
+
         <TouchableOpacity onPress={onVerifyPress} style={ styles.button }>
           <Text style={ styles.buttonText}>Verify</Text>
         </TouchableOpacity>
@@ -100,92 +107,112 @@ export default function SignUpScreen() {
   }
 
   return (
-<View style={styles.SignUpContainer}>
-  <View style={styles.container}>
-    <Image source={require('../../assets/images/revenue-i2.png')} style={styles.illustration} />
-    <Text style={styles.title}>Create Account</Text>
-    
-    <ErrorContainer error={error} onClose={() => setError('')} />
-
-    {/* First + Last Name */}
-    <View style={{ flexDirection: 'row', gap: 8 }}>
-      <View style={{ flex: 1 }}>
-        <Text style={styles.inputLabel}>First Name</Text>
-        <TextInput
-          style={[styles.input, error && styles.errorInput]}
-          value={first_name}
-          placeholder="Enter first name"
-          placeholderTextColor={COLORS.placeholder}
-          onChangeText={setFirstname}
+    <View style={styles.SignUpContainer}>
+      <View style={styles.container}>
+        <Image
+          source={require("../../assets/images/revenue-i2.png")}
+          style={styles.illustration}
         />
+        <Text style={styles.title}>Create Account</Text>
+
+        <ErrorContainer error={error} onClose={() => setError("")} />
+
+        {/* First + Last Name */}
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.inputLabel}>First Name</Text>
+            <TextInput
+              style={[styles.input, error && styles.errorInput]}
+              value={first_name}
+              placeholder="Enter first name"
+              placeholderTextColor={COLORS.placeholder}
+              onChangeText={setFirstname}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.inputLabel}>Last Name</Text>
+            <TextInput
+              style={[styles.input, error && styles.errorInput]}
+              value={last_name}
+              placeholder="Enter last name"
+              placeholderTextColor={COLORS.placeholder}
+              onChangeText={setLastname}
+            />
+          </View>
+        </View>
+
+        {/* Email */}
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputLabel}>Email</Text>
+          <TextInput
+            style={[styles.input, error && styles.errorInput]}
+            autoCapitalize="none"
+            value={emailAddress}
+            placeholder="Enter email"
+            placeholderTextColor={COLORS.placeholder}
+            autoComplete="email"
+            keyboardType="email-address"
+            onChangeText={setEmailAddress}
+          />
+        </View>
+
+        {/* Username */}
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputLabel}>Username</Text>
+          <TextInput
+            style={[styles.input, error && styles.errorInput]}
+            value={username}
+            autoCapitalize="none"
+            placeholder="Enter username"
+            placeholderTextColor={COLORS.placeholder}
+            onChangeText={setUsername}
+          />
+        </View>
+
+        {/* Password */}
+        <Text style={styles.inputLabel}>Password</Text>
+        <View style={styles.inputIcon}>
+          
+          <TextInput
+            style={[styles.inputIconText, error && styles.errorInput]}
+            value={password}
+            placeholder="Enter password"
+            secureTextEntry={!passwordVisible}
+            placeholderTextColor={COLORS.placeholder}
+            onChangeText={setPassword}
+            autoCapitalize="none"
+            accessibilityLabel="Password"
+          />
+          <TouchableOpacity
+            onPress={() => setPasswordVisible(!passwordVisible)}
+            accessibilityLabel={
+              passwordVisible ? "Hide password" : "Show password"
+            }
+          >
+            <Ionicons
+              name={passwordVisible ? "eye-off-outline" : "eye-outline"}
+              size={20}
+              color={COLORS.text}
+              style={styles.inputRightIcon}
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* Continue Button */}
+        <TouchableOpacity onPress={onSignUpPress} style={styles.button}>
+          <Text style={styles.buttonText}>
+            {loading ? "Loading..." : "Continue"}
+          </Text>
+        </TouchableOpacity>
+
+        {/* Footer */}
+        <View style={styles.footerContainer}>
+          <Text style={styles.footerText}>Already have an account?</Text>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Text style={styles.linkText}>Sign in</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={{ flex: 1 }}>
-        <Text style={styles.inputLabel}>Last Name</Text>
-        <TextInput
-          style={[styles.input, error && styles.errorInput]}
-          value={last_name}
-          placeholder="Enter last name"
-          placeholderTextColor={COLORS.placeholder}
-          onChangeText={setLastname}
-        />
-      </View>
     </View>
-
-    {/* Email */}
-    <View style={styles.inputGroup}>
-      <Text style={styles.inputLabel}>Email</Text>
-      <TextInput
-        style={[styles.input, error && styles.errorInput]}
-        autoCapitalize="none"
-        value={emailAddress}
-        placeholder="Enter email"
-        placeholderTextColor={COLORS.placeholder}
-        autoComplete="email"
-        keyboardType="email-address"
-        onChangeText={setEmailAddress}
-      />
-    </View>
-
-    {/* Username */}
-    <View style={styles.inputGroup}>
-      <Text style={styles.inputLabel}>Username</Text>
-      <TextInput
-        style={[styles.input, error && styles.errorInput]}
-        value={username}
-        autoCapitalize="none"
-        placeholder="Enter username"
-        placeholderTextColor={COLORS.placeholder}
-        onChangeText={setUsername}
-      />
-    </View>
-
-    {/* Password */}
-    <View style={styles.inputGroup}>
-      <Text style={styles.inputLabel}>Password</Text>
-      <TextInput
-        style={[styles.input, error && styles.errorInput]}
-        value={password}
-        placeholder="Enter password"
-        secureTextEntry
-        placeholderTextColor={COLORS.placeholder}
-        onChangeText={setPassword}
-      />
-    </View>
-
-    {/* Continue Button */}
-    <TouchableOpacity onPress={onSignUpPress} style={styles.button}>
-      <Text style={styles.buttonText}>{loading ? 'Loading...' : 'Continue'}</Text>
-    </TouchableOpacity>
-
-    {/* Footer */}
-    <View style={styles.footerContainer}>
-      <Text style={styles.footerText}>Already have an account?</Text>
-      <TouchableOpacity onPress={() => router.back()}>
-        <Text style={styles.linkText}>Sign in</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-</View>
-
-  )
+  );
 }

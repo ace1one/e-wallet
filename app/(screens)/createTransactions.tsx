@@ -22,15 +22,6 @@ const create = () => {
     return null;
   }
 
-  const [form, setForm] = useState({
-    category: '',
-    title: '',
-    amount: '',
-    type: 'expense',
-    created_at: new Date().toISOString(),
-    user_id: user.id,
-    remarks: '',
-  });
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loadingCategory, setLoadingCategory] = useState(true);
