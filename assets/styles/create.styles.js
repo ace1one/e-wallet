@@ -107,6 +107,26 @@ export const styles = StyleSheet.create({
      marginTop: 20,
     backgroundColor: COLORS.white,
   },
+
+  inputMarginContainer: {
+     marginTop: 0,
+  },
+  inputDropdownContainer: {
+    // flexDirection: "row",
+    // alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: 12,
+    padding: 4,
+    // marginTop: 20,
+    backgroundColor: COLORS.white,
+  },
+  inputLabel: {
+     marginBottom: 6,
+    color: COLORS.mediumGray,
+    fontSize: 14,
+    fontWeight: '500',
+  },
   inputIcon: {
     marginHorizontal: 12,
   },
@@ -115,6 +135,9 @@ export const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     color: COLORS.text,
+  },
+  placeholderStyle:{
+    color: COLORS.placeholder,
   },
   sectionTitle: {
     flexDirection: "row",

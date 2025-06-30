@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
-import { useAuth } from '@clerk/clerk-expo';
+import { useAuth, useUser } from '@clerk/clerk-expo';
 import { API_URL } from '@/constants/api';
 
 const API = `${API_URL}/users`;
@@ -11,7 +11,7 @@ export const useUsers = ()=>{
     const [users, setUsers] = useState([]);
     const [loadingUsers, setLoadingUsers] = useState(false);
     const [error, setError] = useState(null);
-
+    const { user } = useUser();
     // Create an axios instance once the token is available
     const createAxiosInstance = async () => {
         const token = await getToken({ template: 'mobile' });
@@ -31,7 +31,9 @@ export const useUsers = ()=>{
         try {
             const axiosInstance = await createAxiosInstance();
             const response = await axiosInstance.get('/');
-            setUsers(response.data?.data || []);
+            const { data } = response.data;
+            const filteredUsers = data.filter((u) => u.clerk_id !== user?.id);
+            setUsers(filteredUsers || []);
         
             setLoadingUsers(false);
         } catch (err) {

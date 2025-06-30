@@ -92,7 +92,7 @@ const SplitBillsIndex = () => {
           icon="plus"
           label="Add Expense"
           color="#FFFF"
-          onPress={() => console.log('Pressed')}
+          onPress={() => router.push('/split-bills/create-expenses')}
         />
     </View>
   );

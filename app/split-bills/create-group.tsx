@@ -17,27 +17,22 @@ import type { IMultiSelectRef } from "react-native-element-dropdown";
 import { useGroups } from "@/hooks/useGroup";
 import { set } from "date-fns";
 import  { useUsers } from "@/hooks/useUsers";
+import { useUser } from "@clerk/clerk-expo";
 
 
-const data = [
-  { label: "Apple", value: "1" },
-  { label: "Banana", value: "2" },
-  { label: "Cherry", value: "3" },
-  { label: "Grapes", value: "4" },
-  { label: "Mango", value: "5" },
-];
 const Creategroup = () => {
   const [selected, setSelected] = useState([]);
   const categories = SplitBillCategory;
   const [loading, setLoading] = useState(false);
   const { createGroup } = useGroups();
   const { users,loadingUsers,fetchUsers,error } = useUsers();
-
+  const { user } = useUser();
  
   useEffect(() => {
     async () => {
       try {
         await fetchUsers();
+        console.log(users)
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -57,21 +52,22 @@ const Creategroup = () => {
     defaultValues: {
       name: "",
       type: "",
-      members: [ ],
+      userIds: [ ],
+      createdBy: user?.id
     },
   });
   const selectedType = watch("type");
   const onSubmit = async (data: any) => {
-    console.log("Form Data:", data);
-    //  await createGroup(data)
-    //  setLoading(false);
+      await createGroup(data)
+      setLoading(false);
+      router.push('/split-bills');
   };
   const dropdownRef = useRef<IMultiSelectRef>(null); // ✅ Properly typed ref
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() =>router.push('/split-bills')}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color={COLORS.text} />
@@ -149,14 +145,14 @@ const Creategroup = () => {
           <Text style={styles.inputLabel}>Members</Text>
           <Controller
         control={control}
-        name="members"
+        name="userIds"
         render={({ field: { onChange, value } }) => (
           <MultiSelect
             ref={dropdownRef}
             style={styles.dropdown}
             data={users}
             labelField="email"
-            valueField="email"
+            valueField="clerk_id"
             placeholder="Select members"
             search
             value={value}

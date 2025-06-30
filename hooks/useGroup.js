@@ -78,7 +78,7 @@ export const useGroups = () => {
 
   useEffect(() => {
     if (userId) loadGroups();
-  }, [userId]);
+  }, [fetchGroupsDetails]);
 
   return {
     groups,

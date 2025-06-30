@@ -28,11 +28,16 @@ import { useGroups } from "@/hooks/useGroup.js";
 
 const Group = () => {
   const { groups, loading, error, refresh } = useGroups();
-    console.log('group', groups)
-  if (loading) return <PageLoader />;
+  
   return (
-    <View>
-      {groups.map((group: any) => (
+    <View style={{ display:"flex"}}>
+    {loading ? (
+      <View style={{display:"flex", flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <PageLoader />
+      </View>
+      // <PageLoader />
+    ) : (
+      groups.map((group: any) => (
         <TouchableOpacity style={styles.groupListContainer} key={group.id}>
           <View style={styles.groupListItem}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -46,7 +51,6 @@ const Group = () => {
               <View style={styles.transactionContainer}>
                 <Text style={styles.groupTitle}>{group.name}</Text>
                 <Text style={styles.groupLastTransaction}>{group.status}</Text>
-
               </View>
             </View>
 
@@ -56,8 +60,9 @@ const Group = () => {
             </View>
           </View>
         </TouchableOpacity>
-      ))}
-    </View>
+      ))
+    )}
+  </View>
   );
 };
 
