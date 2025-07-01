@@ -25,14 +25,13 @@ const Creategroup = () => {
   const categories = SplitBillCategory;
   const [loading, setLoading] = useState(false);
   const { createGroup } = useGroups();
-  const { users,loadingUsers,fetchUsers,error } = useUsers();
+  const { filterUser,loadingUsers,fetchUsers,error } = useUsers();
   const { user } = useUser();
  
   useEffect(() => {
     async () => {
       try {
         await fetchUsers();
-        console.log(users)
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -150,8 +149,8 @@ const Creategroup = () => {
           <MultiSelect
             ref={dropdownRef}
             style={styles.dropdown}
-            data={users}
-            labelField="email"
+            data={filterUser}
+            labelField="name"
             valueField="clerk_id"
             placeholder="Select members"
             search

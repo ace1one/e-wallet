@@ -4,11 +4,13 @@ import Toast from 'react-native-toast-message';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import { API_URL } from '@/constants/api';
 
+
 const API = `${API_URL}/users`;
 
 export const useUsers = ()=>{
     const { getToken, userId } = useAuth();
     const [users, setUsers] = useState([]);
+    const [filterUser,setFilterUser] = useState([]);
     const [loadingUsers, setLoadingUsers] = useState(false);
     const [error, setError] = useState(null);
     const { user } = useUser();
@@ -32,9 +34,10 @@ export const useUsers = ()=>{
             const axiosInstance = await createAxiosInstance();
             const response = await axiosInstance.get('/');
             const { data } = response.data;
+            setUsers(data || []);
             const filteredUsers = data.filter((u) => u.clerk_id !== user?.id);
-            setUsers(filteredUsers || []);
-        
+           
+            setFilterUser(filteredUsers);
             setLoadingUsers(false);
         } catch (err) {
             console.error('[Users] Error:', err);
@@ -46,7 +49,7 @@ export const useUsers = ()=>{
                 text2: 'Failed to fetch users',
             });
         }
-    })
+    } ,[getToken])
 
     useEffect(()=>{
         fetchUsers();
@@ -54,6 +57,7 @@ export const useUsers = ()=>{
 
     return {
         users,
+        filterUser,
         loadingUsers,
         error,
         fetchUsers,
